@@ -4,6 +4,7 @@ import VolunteerService from '../services/VolunteerService.js';
 import GuestService from '../services/GuestService.js';
 import GetDataRowService from '../services/GetDataRowService.js';
 import tableTypes from '../models/tableTypes.js';
+import { convertEventId } from '../utils/ConvertEventId.js';
 
 class GoogleSheetsRepository {
   async getVolunteers(authClient) {
@@ -43,7 +44,6 @@ class GoogleSheetsRepository {
 
       await VolunteerService.addVolunteers(volunteersList);
       console.log('Volunteers DB updated successfully');
-      return;
     } catch (err) {
       console.log(err);
     }
@@ -86,16 +86,60 @@ class GoogleSheetsRepository {
 
       await GuestService.addGuests(guestsList);
       console.log('Guests DB updated successfully');
-      return;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getForm(authClient) {
+    try {
+      let row = 2;
+      const lastRow = await GetDataRowService.getLastRow(tableTypes.Form);
+      if (lastRow) {
+        row = lastRow;
+      }
+      const { result: formData, initialRow } = await GoogleSelectService.getSheetList(
+        authClient, tableTypes.Form, row, 'B', 'I',
+      );
+
+      if (!formData || !formData.length) {
+        return;
+      }
+
+      const formDataList = formData
+      .map((f, index) => ({
+        form_row: index + initialRow,
+        guest_id: f[0] || null,
+        ...convertEventId(f),
+      }))
+      .filter(g => g.guest_id);
+
+      if (!formDataList.length ) {
+        return;
+      }
+
+      const newLastRow = formDataList[formDataList.length - 1].form_row + 1;
+      if (lastRow) {
+        await GetDataRowService.updateLastRow(tableTypes.Form, newLastRow);
+      } else {
+        await GetDataRowService.addLastRow(tableTypes.Form, newLastRow);
+      }
+
+      await GuestService.updateGuestEvents(formDataList);
+      console.log('Guests DB updated by Form');
     } catch (err) {
       console.log(err);
     }
   }
 
   async getUpdates() {
-    const authClient = await GoogleAuthService.authorize();
-    await this.getVolunteers(authClient);
-    await this.getGuests(authClient);
+    try {
+      const authClient = await GoogleAuthService.authorize();
+      await this.getVolunteers(authClient);
+      await this.getGuests(authClient);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

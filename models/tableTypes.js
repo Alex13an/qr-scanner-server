@@ -1,7 +1,8 @@
 export default {
+  Form: 'Form',
+  Events: 'Events',
   volunteers: 'volunteers',
   guests: 'guests',
-  events: 'events',
   get_data_rows: 'get_data_rows',
   staff: 'staff',
   press: 'press',

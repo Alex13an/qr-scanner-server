@@ -3,6 +3,7 @@ import GuestController from '../controllers/GuestController.js';
 
 const router = new Router();
 
-router.put('/enter/:id', GuestController.checkGuest);
+router.put('/enter/:id', GuestController.enterGuest);
+router.put('/:id', GuestController.guestEnterEvent);
 
 export default router;

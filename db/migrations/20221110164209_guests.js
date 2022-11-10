@@ -6,12 +6,13 @@ export async function up(knex) {
     table.integer('day_two').notNullable().defaultTo(0);
     table.integer('day_three').notNullable().defaultTo(0);
     table.integer('day_four').notNullable().defaultTo(0);
-    table.integer('session_b').notNullable().defaultTo(0);
-    table.integer('session_c').notNullable().defaultTo(0);
-    table.integer('session_d').notNullable().defaultTo(0);
-    table.integer('session_e').notNullable().defaultTo(0);
-    table.integer('session_f').notNullable().defaultTo(0);
-    table.integer('session_g').notNullable().defaultTo(0);
+    table.string('session_b').notNullable().defaultTo(0);
+    table.string('session_c').notNullable().defaultTo(0);
+    table.string('session_d').notNullable().defaultTo(0);
+    table.string('session_e').notNullable().defaultTo(0);
+    table.string('session_f').notNullable().defaultTo(0);
+    table.string('session_g').notNullable().defaultTo(0);
+    table.string('session_h').notNullable().defaultTo(0);
   })
 };
 

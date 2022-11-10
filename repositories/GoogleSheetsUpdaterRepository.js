@@ -1,9 +1,10 @@
 import GoogleAuthService from '../services/GoogleAuthService.js';
 import GoogleUpdateService from '../services/GoogleUpdateService.js';
+import GoogleSheetsRepository from './GoogleSheetsRepository.js';
 import { setIntervalAsync } from 'set-interval-async';
 import { createUpdate } from '../utils/UpdateCreator.js'
 
-const UPDATE_PERIOD = 1500;
+const UPDATE_PERIOD = 1300;
 
 class GoogleSheetsUpdater {
   updateFields = [];
@@ -15,12 +16,14 @@ class GoogleSheetsUpdater {
   timedCallback = async () => {
     try {
       console.log('tick');
+      const authClient = await GoogleAuthService.authorize();
+      await GoogleSheetsRepository.getForm(authClient);
 
       if (this.updateFields.length < 1) {
         return;
       }
 
-      const updateNum = await this.makeUpdate();
+      const updateNum = await this.makeUpdate(authClient);
       this.updateFields.splice(0, updateNum);
     } catch (err) {
       console.log(err);
@@ -32,10 +35,9 @@ class GoogleSheetsUpdater {
     this.updateFields.push(update);
   }
 
-  makeUpdate = async () => {
+  makeUpdate = async (authClient) => {
     try {
       const fields = [...this.updateFields];
-      const authClient = await GoogleAuthService.authorize();
       await GoogleUpdateService.makeUpdate(fields, authClient);
 
       return fields.length;

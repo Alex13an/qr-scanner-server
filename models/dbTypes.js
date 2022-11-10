@@ -7,7 +7,13 @@ export const volunteerColumns = {
   day_four: 'day_four',
 }
 
-export const eventsColumns = {
+export const guestsColumns = {
+  guest_id: 'guest_id',
+  guest_row: 'guest_row',
+  day_one: 'day_one',
+  day_two: 'day_two',
+  day_three: 'day_three',
+  day_four: 'day_four',
   session_b: 'session_b',
   session_c: 'session_c',
   session_d: 'session_d',
