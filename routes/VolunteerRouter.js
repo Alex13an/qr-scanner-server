@@ -3,6 +3,6 @@ import VolunteerController from '../controllers/VolunteerController.js';
 
 const router = new Router();
 
-router.get('/:id', VolunteerController.getVolunteer);
+router.put('/:id', VolunteerController.checkVolunteer);
 
 export default router;

@@ -1,15 +1,13 @@
-import VolunteerService from '../services/VolunteerService.js';
+import GuestService from '../services/GuestService.js';
 import ApiError from '../utils/ApiError.js';
 import GoogleSheetsUpdaterRepository from '../repositories/GoogleSheetsUpdaterRepository.js';
 import tableTypes from '../models/tableTypes.js';
 
-class VolunteerController {
-  async checkVolunteer(req, res, next) {
+class GuestController {
+  async enterGuest(req, res, next) {
     try {
       const id = req.params.id;
-      const day = '' + req.body.day;
-      const checkIn = req.body.checkIn;
-      if (!id || !day || checkIn === undefined) {
+      if (!id) {
         next(ApiError.badRequest('Not enough data'));
         return;
       }
@@ -58,4 +56,4 @@ class VolunteerController {
   }
 }
 
-export default new VolunteerController();
+export default new GuestController();

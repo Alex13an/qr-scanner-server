@@ -1,14 +1,8 @@
 import knex from '../db/knex.js';
+import { volunteerColumns as columns } from '../models/dbTypes.js';
+import tableTypes from '../models/tableTypes.js';
 
-const tableName = 'volunteers';
-
-const columns = {
-  volunteer_id: 'volunteer_id',
-  volunteer_row: 'volunteer_row',
-  day_one: 'day_one',
-  day_two: 'day_two',
-  day_three: 'day_three',
-}
+const tableName = tableTypes.volunteers;
 
 class VolunteerService {
   async addVolunteers(volunteers) {
@@ -22,10 +16,17 @@ class VolunteerService {
 
   async getVolunteer(id) {
     const res = await knex.select(...Object.values(columns)).from(tableName).where({ volunteer_id: id }).first();
-    console.log(res);
     if (!res || !res.volunteer_id) {
       throw new Error('Not found');
     }
+    return res;
+  }
+
+  async updateVolunteer(id, day, check) {
+    if (!columns[day]) {
+      throw new Error('Wrong day data');
+    }
+    const res = await knex(tableName).where({ volunteer_id: id }).update(columns[day], check);
     return res;
   }
 }

@@ -5,6 +5,7 @@ export async function up(knex) {
     table.integer('day_one').notNullable().defaultTo(0);
     table.integer('day_two').notNullable().defaultTo(0);
     table.integer('day_three').notNullable().defaultTo(0);
+    table.integer('day_four').notNullable().defaultTo(0);
   })
 };
 

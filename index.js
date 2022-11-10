@@ -2,8 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import router from './routes/index.js';
 import knex from './db/knex.js';
-import GoogleSheetsRepository from './repositories/GoogleSheetsRepository.js';
 import errorHandler from './middleware/ErrorHandler.js';
+import GoogleSheetsRepository from './repositories/GoogleSheetsRepository.js';
+import GoogleSheetsUpdater from './repositories/GoogleSheetsUpdaterRepository.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -18,8 +19,9 @@ app.use(errorHandler);
   try {
     await knex.migrate.latest();
     console.log('DB loaded successfully');
-    await GoogleSheetsRepository.getVolunteers();
+    await GoogleSheetsRepository.getUpdates();
     app.listen(PORT, () => console.log(`server started on port ${PORT}`));
+    GoogleSheetsUpdater.startTimer();
   } catch (err) {
     console.log(err);
   }
