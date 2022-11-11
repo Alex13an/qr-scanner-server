@@ -52,6 +52,14 @@ class GuestService {
         .catch(trx.rollback);
     });
   }
+
+  async getActiveSeats(session, eventId) {
+    const res = await knex(tableName).select(`session_${session} as amount`)
+      .where(`session_${session}`, `1,${eventId}`)
+      .orWhere(`session_${session}`, `2,${eventId}`)
+      .orWhere(`session_${session}`, `3,${eventId}`);
+    return res;
+  }
 }
 
 export default new GuestService();

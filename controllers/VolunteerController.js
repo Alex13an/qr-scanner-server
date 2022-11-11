@@ -7,8 +7,8 @@ class VolunteerController {
   async checkVolunteer(req, res, next) {
     try {
       const id = req.params.id;
-      const day = '' + req.body.day;
-      const checkIn = req.body.checkIn;
+      const day = '' + req.body.day; // example day_one
+      const checkIn = req.body.checkIn; // example false
       if (!id || !day || checkIn === undefined) {
         next(ApiError.badRequest('Not enough data'));
         return;

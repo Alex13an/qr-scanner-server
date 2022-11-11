@@ -27,3 +27,10 @@ export const getDataRowColumns = {
   sheet: 'sheet',
   sheet_last_row: 'sheet_last_row',
 }
+
+export const eventsLimitsColumns = {
+  session: 'session',
+  event_id: 'event_id',
+  limit: 'limit',
+  free_space: 'free_space',
+}

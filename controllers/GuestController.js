@@ -6,7 +6,7 @@ import tableTypes from '../models/tableTypes.js';
 class GuestController {
   async enterGuest(req, res, next) {
     try {
-      const id = req.params.id;
+      const id = req.params.id; // example: 674283283
       const day = 'day_one'; // TODO day cycle
       if (!id) {
         next(ApiError.badRequest('Not enough data'));
@@ -42,8 +42,8 @@ class GuestController {
   async guestEnterEvent(req, res, next) {
     try {
       const id = req.params.id;
-      const session = req.body.session;
-      const eventId = req.body.eventId;
+      const session = req.body.session; // example 'session_d'
+      const eventId = req.body.eventId; // example 2
 
       if (!id || !session || !eventId) {
         next(ApiError.badRequest('Not enough data'));
@@ -59,12 +59,15 @@ class GuestController {
       const [checkId, eventReg] = currentSession.split(',');
       if (!checkId || !eventReg) {
         res.status(200).json({ updated: false, reason: 'Guest data error' })
+        return;
       }
       if (eventReg !== eventId) {
         res.status(200).json({ updated: false, reason: `Guest registered to another event ( ${session}, ${eventReg} )` });
+        return;
       }
       if (checkId >= 2) {
         res.status(200).json({ updated: false, reason: 'Guest already entered this event. If he want to leave, choose another scanner option' })
+        return;
       }
       const newCheck = `2,${eventReg}`;
       const resData = await GuestService.updateGuestEvent(id, session, newCheck);
