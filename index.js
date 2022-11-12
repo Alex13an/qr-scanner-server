@@ -5,7 +5,8 @@ import knex from './db/knex.js';
 import errorHandler from './middleware/ErrorHandler.js';
 import GoogleSheetsRepository from './repositories/GoogleSheetsRepository.js';
 import GoogleSheetsUpdater from './repositories/GoogleSheetsUpdaterRepository.js';
-import http from 'http';
+import https from 'https';
+import fs from 'fs';
 
 const PORT = process.env.PORT || 3000;
 
@@ -16,7 +17,12 @@ app.use(cors());
 app.use('/', router);
 app.use(errorHandler);
 
-const httpServer = http.createServer(app);
+const httpsOptions = {
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./cert.pem')
+}
+
+const httpServer = https.createServer(httpsOptions, app);
 
 (async () => {
   try {
