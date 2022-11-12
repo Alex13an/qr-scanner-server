@@ -21,7 +21,7 @@
 
       <div class="main-list__title">{{ labels.other }}</div>
       <router-link
-        v-for="(otherType, index) in otherTypes"
+        v-for="(otherType, index) in otherEvents"
         :key="index"
         :to="{ name: 'other-enter', params: { otherType } }"
         class="main-list__item main-list__item_other"
@@ -35,6 +35,7 @@
 <script>
 import tables from '../models/tables.js';
 import labels from '../models/labels.js';
+import otherEvents from '../models/otherEvents.js';
 import DaySelector from '../components/DaySelector.vue';
 
 export default {
@@ -44,11 +45,7 @@ export default {
   beforeCreate() {
     this.tables = tables;
     this.labels = labels;
-  },
-  computed: {
-    otherTypes() {
-      return ['press', 'local_press', 'staff', 'organizators', 'other'];
-    },
+    this.otherEvents = otherEvents;
   },
 };
 </script>
