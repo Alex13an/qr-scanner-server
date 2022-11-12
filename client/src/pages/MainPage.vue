@@ -17,6 +17,7 @@
       <router-link :to="{ name: `${tables.guests.name}-events` }" class="main-list__item main-list__item_guests">
         {{ labels.eventsEnter }}
       </router-link>
+      <router-link :to="{ name: 'counter' }" class="main-list__item main-list__item_guests">Counter</router-link>
     </div>
   </div>
 </template>
@@ -48,6 +49,7 @@ export default {
 .main-list {
   color: white;
   background: white;
+  padding-bottom: 50px;
   &__title {
     color: var(--blue);
     font-size: 22px;

@@ -22,6 +22,7 @@ export default {};
   --green: #95c11f;
   --light-green: rgba(149, 193, 3, 0.8);
   --purple: #9f358b;
+  --light-purple: rgba(159, 53, 139, 0.8);
   --orange: #f39200;
 }
 </style>
