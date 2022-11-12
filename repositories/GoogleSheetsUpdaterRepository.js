@@ -8,6 +8,7 @@ const UPDATE_PERIOD = 1300;
 
 class GoogleSheetsUpdater {
   updateFields = [];
+  tick = 0;
 
   startTimer = () => {
     setIntervalAsync(this.timedCallback, UPDATE_PERIOD);
@@ -15,6 +16,10 @@ class GoogleSheetsUpdater {
 
   timedCallback = async () => {
     try {
+      if (this.tick < 10) {
+        this.tick += 1;
+        return;
+      }
       const authClient = await GoogleAuthService.authorize();
       await GoogleSheetsRepository.getForm(authClient);
 

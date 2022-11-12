@@ -34,3 +34,12 @@ export const eventsLimitsColumns = {
   limit: 'limit',
   free_space: 'free_space',
 }
+
+export const otherColumns = {
+  guest_id: 'guest_id',
+  guest_row: 'guest_row',
+  day_one: 'day_one',
+  day_two: 'day_two',
+  day_three: 'day_three',
+  day_four: 'day_four',
+}

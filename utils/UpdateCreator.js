@@ -2,7 +2,7 @@ import tableTypes from '../models/tableTypes.js';
 import { volunteerColumns } from '../models/dbTypes.js';
 
 export const createUpdate = (data, type, row, extra) => {
-  if (!tableTypes[type]) {
+  if (!tableTypes[type] && !tableTypes.other[type]) {
     console.error('WRONG TYPE');
     return;
   }
@@ -65,5 +65,32 @@ export const createUpdate = (data, type, row, extra) => {
     const range = `${type}!A${row}:H${row}`;
     const values = Object.values(data);
     return { range, values: [values] };
+  }
+  // OTHER
+  if (tableTypes.other.hasOwnProperty(type) && extra.check) {
+    if (!extra.day) {
+      console.error('NOT ENOUGH DAY DATA');
+      return;
+    }
+    let cell = '';
+    switch (extra.day) { // hardcode from google sheets VERY FUCKING IMPORTANT
+      case volunteerColumns.day_one:
+        cell += 'L';
+        break;
+      case volunteerColumns.day_two:
+        cell += 'M';
+        break;
+      case volunteerColumns.day_three:
+        cell += 'N';
+        break;
+      case volunteerColumns.day_four:
+        cell += 'O';
+        break;
+      default: 
+        console.error('WRONG DAY ARGUMENT');
+        return;
+    }
+    cell += row;
+    return { range: `${type}!${cell}`, values: [[`${data}`]] };
   }
 }

@@ -5,7 +5,11 @@ export default {
   volunteers: 'volunteers',
   guests: 'guests',
   get_data_rows: 'get_data_rows',
-  staff: 'staff',
-  press: 'press',
-  local_press: 'local_press',
+  other: {
+    press: 'press',
+    local_press: 'local_press',
+    staff: 'staff',
+    other: 'other',
+    organizators: 'organizators',
+  }
 }

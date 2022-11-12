@@ -2,6 +2,7 @@ import GoogleAuthService from '../services/GoogleAuthService.js';
 import GoogleSelectService from '../services/GoogleSelectService.js';
 import VolunteerService from '../services/VolunteerService.js';
 import GuestService from '../services/GuestService.js';
+import OtherService from '../services/OtherService.js';
 import GetDataRowService from '../services/GetDataRowService.js';
 import tableTypes from '../models/tableTypes.js';
 import { convertEventId } from '../utils/ConvertEventId.js';
@@ -51,7 +52,7 @@ class GoogleSheetsRepository {
 
   async getGuests(authClient) {
     try {
-      let row = 2;
+      let row = 3;
       const lastRow = await GetDataRowService.getLastRow(tableTypes.guests);
       if (lastRow) {
         row = lastRow;
@@ -132,11 +133,231 @@ class GoogleSheetsRepository {
     }
   }
 
+  async getOther(authClient) {
+    try {
+      let row = 2;
+      const tableName = tableTypes.other.other;
+      const lastRow = await GetDataRowService.getLastRow(tableName);
+      if (lastRow) {
+        row = lastRow;
+      }
+      const { result: guests, initialRow } = await GoogleSelectService.getSheetList(
+        authClient, tableName, row, 'A', 'A',
+      );
+
+      if (!guests || !guests.length) {
+        console.log('Other DB data is present');
+        return;
+      }
+
+      const guestsList = guests
+      .map((g, index) => ({
+        guest_id: g[0] || null,
+        guest_row: index + initialRow,
+      }))
+      .filter(g => g.guest_id);
+
+      if (!guestsList.length ) {
+        console.log('Other DB data is present');
+        return;
+      }
+
+      const newLastRow = guestsList[guestsList.length - 1].guest_row + 1;
+      if (lastRow) {
+        await GetDataRowService.updateLastRow(tableName, newLastRow);
+      } else {
+        await GetDataRowService.addLastRow(tableName, newLastRow);
+      }
+
+      await OtherService.addGuests(guestsList, tableName);
+      console.log('Other DB updated successfully');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getPress(authClient) {
+    try {
+      let row = 2;
+      const tableName = tableTypes.other.press;
+      const lastRow = await GetDataRowService.getLastRow(tableName);
+      if (lastRow) {
+        row = lastRow;
+      }
+      const { result: guests, initialRow } = await GoogleSelectService.getSheetList(
+        authClient, tableName, row, 'B', 'B',
+      );
+
+      if (!guests || !guests.length) {
+        console.log('Press DB data is present');
+        return;
+      }
+
+      const guestsList = guests
+      .map((g, index) => ({
+        guest_id: g[0] || null,
+        guest_row: index + initialRow,
+      }))
+      .filter(g => g.guest_id);
+
+      if (!guestsList.length ) {
+        console.log('Press DB data is present');
+        return;
+      }
+
+      const newLastRow = guestsList[guestsList.length - 1].guest_row + 1;
+      if (lastRow) {
+        await GetDataRowService.updateLastRow(tableName, newLastRow);
+      } else {
+        await GetDataRowService.addLastRow(tableName, newLastRow);
+      }
+
+      await OtherService.addGuests(guestsList, tableName);
+      console.log('Press DB updated successfully');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getLocalPress(authClient) {
+    try {
+      let row = 3;
+      const tableName = tableTypes.other.local_press;
+      const lastRow = await GetDataRowService.getLastRow(tableName);
+      if (lastRow) {
+        row = lastRow;
+      }
+      const { result: guests, initialRow } = await GoogleSelectService.getSheetList(
+        authClient, tableName, row, 'B', 'B',
+      );
+
+      if (!guests || !guests.length) {
+        console.log('Local Press DB data is present');
+        return;
+      }
+
+      const guestsList = guests
+      .map((g, index) => ({
+        guest_id: g[0] || null,
+        guest_row: index + initialRow,
+      }))
+      .filter(g => g.guest_id);
+
+      if (!guestsList.length ) {
+        console.log('Local Press DB data is present');
+        return;
+      }
+
+      const newLastRow = guestsList[guestsList.length - 1].guest_row + 1;
+      if (lastRow) {
+        await GetDataRowService.updateLastRow(tableName, newLastRow);
+      } else {
+        await GetDataRowService.addLastRow(tableName, newLastRow);
+      }
+
+      await OtherService.addGuests(guestsList, tableName);
+      console.log('Local Press DB updated successfully');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getStaff(authClient) {
+    try {
+      let row = 2;
+      const tableName = tableTypes.other.staff;
+      const lastRow = await GetDataRowService.getLastRow(tableName);
+      if (lastRow) {
+        row = lastRow;
+      }
+      const { result: guests, initialRow } = await GoogleSelectService.getSheetList(
+        authClient, tableName, row, 'B', 'B',
+      );
+
+      if (!guests || !guests.length) {
+        console.log('Staff Press DB data is present');
+        return;
+      }
+
+      const guestsList = guests
+      .map((g, index) => ({
+        guest_id: g[0] || null,
+        guest_row: index + initialRow,
+      }))
+      .filter(g => g.guest_id);
+
+      if (!guestsList.length ) {
+        console.log('Staff Press DB data is present');
+        return;
+      }
+
+      const newLastRow = guestsList[guestsList.length - 1].guest_row + 1;
+      if (lastRow) {
+        await GetDataRowService.updateLastRow(tableName, newLastRow);
+      } else {
+        await GetDataRowService.addLastRow(tableName, newLastRow);
+      }
+
+      await OtherService.addGuests(guestsList, tableName);
+      console.log('Staff Press DB updated successfully');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async getOrganizators(authClient) {
+    try {
+      let row = 2;
+      const tableName = tableTypes.other.organizators;
+      const lastRow = await GetDataRowService.getLastRow(tableName);
+      if (lastRow) {
+        row = lastRow;
+      }
+      const { result: guests, initialRow } = await GoogleSelectService.getSheetList(
+        authClient, tableName, row, 'A', 'A',
+      );
+
+      if (!guests || !guests.length) {
+        console.log('Organizators Press DB data is present');
+        return;
+      }
+
+      const guestsList = guests
+      .map((g, index) => ({
+        guest_id: g[0] || null,
+        guest_row: index + initialRow,
+      }))
+      .filter(g => g.guest_id);
+
+      if (!guestsList.length ) {
+        console.log('Organizators Press DB data is present');
+        return;
+      }
+
+      const newLastRow = guestsList[guestsList.length - 1].guest_row + 1;
+      if (lastRow) {
+        await GetDataRowService.updateLastRow(tableName, newLastRow);
+      } else {
+        await GetDataRowService.addLastRow(tableName, newLastRow);
+      }
+
+      await OtherService.addGuests(guestsList, tableName);
+      console.log('Organizators Press DB updated successfully');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async getUpdates() {
     try {
       const authClient = await GoogleAuthService.authorize();
       await this.getVolunteers(authClient);
       await this.getGuests(authClient);
+      await this.getPress(authClient);
+      await this.getLocalPress(authClient);
+      await this.getStaff(authClient);
+      await this.getOther(authClient);
+      await this.getOrganizators(authClient);
     } catch (err) {
       console.log(err);
     }
