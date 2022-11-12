@@ -1,12 +1,54 @@
 import EventsLimitsService from '../services/EventsLimitsService.js';
 import ApiError from '../utils/ApiError.js';
-import tableTypes from '../models/tableTypes.js';
 import eventTypes from '../models/eventTypes.js';
 import GuestService from '../services/GuestService.js';
 
 const sessions = ['b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 class CounterController {
+  async initLimits(req, res, next) {
+    try {
+      await EventsLimitsService.initEventsLimits();
+      res.status(200).json({ message: 'Limits inited' });
+    } catch (err) {
+      next(ApiError.badRequest(err.message));
+    }
+  }
+
+  async getCounter(req, res, next) {
+    try {
+      const eventData = req.params.id; // example: b4
+      const [session, eventId] = eventData.split('');
+
+      const resData = await EventsLimitsService.getEventLimit(session, eventId);
+      if (!resData) {
+        next(ApiError.badRequest('There is no specified limit for this event'));
+        return;
+      }
+      const { limit, free_space } = resData;
+      const data = await GuestService.getActiveSeats(session, eventId);
+      if (!data) {
+        next(ApiError.badRequest('Places not found'));
+      }
+      const registeredSeats = data.reduce((sum, place) => {
+        if (place.amount[0] === '1') {
+          sum += 1;
+        }
+        return sum;
+      }, 0)
+
+      const enteredSeats = data.reduce((sum, place) => {
+        if (place.amount[0] === '2') {
+          sum += 1;
+        }
+        return sum;
+      }, 0)
+      const placeData = { regPlaces: limit - registeredSeats - enteredSeats, seatPlaces: limit - enteredSeats + free_space };
+      res.status(200).json({ placeData });
+    } catch (err) {
+      next(ApiError.badRequest(err.message));
+    }
+  }
   async getCounter(req, res, next) {
     try {
       const eventData = req.params.id; // example: b4

@@ -1,10 +1,25 @@
 import knex from '../db/knex.js';
 import { eventsLimitsColumns as columns, eventsLimitsColumns } from '../models/dbTypes.js';
 import tableTypes from '../models/tableTypes.js';
+import { locations } from '../models/limits.js';
 
 const tableName = tableTypes.events_limits;
 
 class EventsLimitsService {
+  async initEventsLimits() {
+    let limits = [];
+    Object.values(locations).forEach(location => {
+      location.events.forEach(event => {
+        limits.push({
+          session: event[0],
+          event_id: event[1],
+          limit: location.limit,
+        });
+      })
+    });
+    await knex(tableName).insert(limits);
+  }
+
   async addEventLimit(session, event_id, limit) {
     const currentEventLimit = await knex.select().from(tableName).where({ session, event_id }).first();
     let res;
