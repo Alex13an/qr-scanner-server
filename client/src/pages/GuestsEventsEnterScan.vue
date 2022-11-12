@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <QrScanner :qrbox="200" :fps="10" @result="onScan" />
+    <QrScanner :qrbox="250" :fps="10" @result="onScan" />
     <div class="current-data">
       <div class="current-data__title">Event {{ eventId }}</div>
       <div v-if="errorMessage" class="current-data__qr-error">{{ labels.qrError + errorMessage }}</div>
@@ -87,7 +87,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 80vw;
-  margin: 1vw 10vw 0;
+  margin: 10px 10vw 0;
 }
 
 .current-data {

@@ -39,7 +39,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 80vw;
-  margin: 1vw 10vw 0;
+  margin: 10px 10vw 0;
   &__label {
     font-size: 20px;
     margin: 1vw 0;
@@ -48,10 +48,10 @@ export default {
   }
   &__event {
     font-size: 14px;
-    padding: 0.5vw;
+    padding: 5px;
     background: var(--blue);
     color: white;
-    margin-bottom: 0.5vw;
+    margin-bottom: 10px;
     text-decoration: none;
     &:hover,
     &:active {

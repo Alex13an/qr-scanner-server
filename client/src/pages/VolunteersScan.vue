@@ -1,9 +1,10 @@
 <template>
   <div class="main-container">
-    <QrScanner :qrbox="200" :fps="10" @result="onScan" />
+    <QrScanner :qrbox="250" :fps="10" @result="onScan" />
     <div class="current-data">
       <div class="current-data__title">{{ labels.volunteers }}</div>
       <div class="current-data__extra">{{ checkOut ? labels.checkOut : labels.checkIn }}</div>
+      <div class="current-data__extra">{{ getCurrentDay.label }}</div>
       <div v-if="errorMessage" class="current-data__qr-error">{{ labels.qrError + errorMessage }}</div>
       <div v-if="isLoading" class="current-data__loading">Loading...</div>
       <div v-if="successMessage" class="current-data__success">{{ successMessage }}</div>
@@ -18,10 +19,14 @@ import tables from '../models/tables.js';
 import axios from 'axios';
 import QrValitadation from '../utils/QrValidation.js';
 import { apiBase } from '../models/apibase.js';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
     QrScanner,
+  },
+  computed: {
+    ...mapGetters(['getCurrentDay']),
   },
   mounted() {
     const extraData = this.$route.query;
@@ -30,7 +35,6 @@ export default {
   data() {
     return {
       decoded: '',
-      day: '',
       checkOut: false,
       errorMessage: '',
       isLoading: false,
@@ -45,7 +49,6 @@ export default {
         }
         this.successMessage = '';
         this.errorMessage = '';
-        this.day = tables.volunteers.extra.day_one; // TODO day changing system
 
         const qrData = QrValitadation.prepareQrData(decodedText, tables.volunteers.name);
         if (!qrData.id) {
@@ -55,7 +58,7 @@ export default {
 
         this.isLoading = true;
         const res = await axios.put(apiBase + `/${tables.volunteers.name}/${qrData.id}`, {
-          day: this.day,
+          day: this.getCurrentDay.id,
           checkIn: !this.checkOut,
         });
         this.isLoading = false;
@@ -85,7 +88,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 80vw;
-  margin: 10vh 10vw 0;
+  margin: 10px 10vw 0;
 }
 
 .current-data {

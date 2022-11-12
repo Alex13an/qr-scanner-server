@@ -7,7 +7,7 @@ class GuestController {
   async enterGuest(req, res, next) {
     try {
       const id = req.params.id; // example: 674283283
-      const day = 'day_one'; // TODO day cycle
+      const day = req.body.day; // example 'day_one'
       if (!id) {
         next(ApiError.badRequest('Not enough data'));
         return;

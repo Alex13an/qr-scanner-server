@@ -1,9 +1,9 @@
 <template>
   <div class="main-container">
-    <QrScanner :qrbox="200" :fps="10" @result="onScan" />
+    <QrScanner :qrbox="250" :fps="10" @result="onScan" />
     <div class="current-data">
       <div class="current-data__title">{{ labels.guestsEnter }}</div>
-      <div class="current-data__extra">{{ 'Day one' }}</div>
+      <div class="current-data__extra">{{ getCurrentDay.label }}</div>
       <div v-if="errorMessage" class="current-data__qr-error">{{ labels.qrError + errorMessage }}</div>
       <div v-if="isLoading" class="current-data__loading">Loading...</div>
       <div v-if="successMessage" class="current-data__success">{{ successMessage }}</div>
@@ -18,6 +18,7 @@ import tables from '../models/tables.js';
 import axios from 'axios';
 import QrValitadation from '../utils/QrValidation.js';
 import { apiBase } from '../models/apibase.js';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -29,12 +30,14 @@ export default {
   data() {
     return {
       decoded: '',
-      day: '',
       checkOut: false,
       errorMessage: '',
       isLoading: false,
       successMessage: '',
     };
+  },
+  computed: {
+    ...mapGetters(['getCurrentDay']),
   },
   methods: {
     async onScan(decodedText) {
@@ -44,7 +47,6 @@ export default {
         }
         this.successMessage = '';
         this.errorMessage = '';
-        this.day = tables.guests.fields.day_one; // TODO day changing system
 
         const qrData = QrValitadation.prepareQrData(decodedText, tables.guests.name);
         if (!qrData.id) {
@@ -53,7 +55,9 @@ export default {
         }
 
         this.isLoading = true;
-        const res = await axios.put(apiBase + `/${tables.guests.name}/enter/${qrData.id}`);
+        const res = await axios.put(apiBase + `/${tables.guests.name}/enter/${qrData.id}`, {
+          day: this.getCurrentDay.id,
+        });
         this.isLoading = false;
         if (!res.data) {
           this.errorMessage = 'Server Response Error';
@@ -81,7 +85,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 80vw;
-  margin: 1vw 10vw 0;
+  margin: 10px 10vw 0;
 }
 
 .current-data {

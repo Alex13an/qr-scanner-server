@@ -15,7 +15,6 @@ class GoogleSheetsUpdater {
 
   timedCallback = async () => {
     try {
-      console.log('tick');
       const authClient = await GoogleAuthService.authorize();
       await GoogleSheetsRepository.getForm(authClient);
 
