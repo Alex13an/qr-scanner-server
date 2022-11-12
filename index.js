@@ -15,7 +15,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use('/', router);
+
+app.use(express.static(path.join(path.dirname(__dirname), 'client/dist')))
+
 app.use(errorHandler);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(path.dirname(__dirname), 'client/build/index.html'))
+})
 
 const httpsOptions = {
   key: fs.readFileSync('./key.pem'),
