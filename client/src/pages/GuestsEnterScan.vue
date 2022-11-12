@@ -7,6 +7,7 @@
       <div v-if="errorMessage" class="current-data__qr-error">{{ labels.qrError + errorMessage }}</div>
       <div v-if="isLoading" class="current-data__loading">Loading...</div>
       <div v-if="successMessage" class="current-data__success">{{ successMessage }}</div>
+      <div @click="toggleOk" v-if="isOk" class="ok-window">Ok</div>
     </div>
   </div>
 </template>
@@ -40,9 +41,13 @@ export default {
     ...mapGetters(['getCurrentDay']),
   },
   methods: {
+    toggleOk() {
+      this.isOk = false;
+    },
+
     async onScan(decodedText) {
       try {
-        if (this.isLoading) {
+        if (this.isLoading || this.isOk) {
           return;
         }
         this.successMessage = '';
@@ -67,6 +72,7 @@ export default {
         } else {
           this.errorMessage = res.data.reason;
         }
+        this.isOk = true;
       } catch (err) {
         console.error(err);
         this.isLoading = false;
@@ -95,6 +101,24 @@ export default {
   }
   &__success {
     color: green;
+  }
+}
+
+.ok-window {
+  background: var(--blue);
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  bottom: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover,
+  &:focus {
+    background: var(--light-blue);
   }
 }
 </style>
