@@ -25,6 +25,10 @@
     <div class="counter__partners">Partners:</div>
     <img class="logo-hell" src="../assets/images/logo-hell.png" alt="logos" />
     <img class="corner-boy" src="../assets/images/corner-boy.png" alt="corner boy, lives in right bottom corner" />
+    <div class="admin-panel">
+      <div @click="decrement" class="admin-panel__button">-</div>
+      <div @click="increment" class="admin-panel__button">+</div>
+    </div>
   </div>
 </template>
 
@@ -33,22 +37,15 @@ import events from '../models/events.js';
 import axios from 'axios';
 import { apiBase } from '../models/apibase.js';
 
+const pollingInterval = 1800;
+
 export default {
   data() {
     return {
-      regs: 10,
-      seats: 101,
+      regs: 1,
+      seats: 1,
+      polling: null,
     };
-  },
-  methods: {
-    async getCounter() {
-      const { eventId } = this.$route.params;
-      const res = await axios.get(apiBase + `counter/${eventId}`);
-      console.log(res.data);
-    },
-  },
-  async mounted() {
-    await this.getCounter();
   },
   computed: {
     session() {
@@ -67,6 +64,59 @@ export default {
       const { eventId } = this.$route.params;
       return session[eventId];
     },
+  },
+  methods: {
+    async getCounter() {
+      try {
+        const { eventId } = this.$route.params;
+        const res = await axios.get(apiBase + `/counter/${eventId}`);
+        const placeData = res.data?.placeData;
+        if (!placeData) {
+          return;
+        }
+        this.regs = placeData.regPlaces;
+        const seats = placeData.seatPlaces;
+        this.seats = seats < 0 ? 0 : seats;
+      } catch (err) {
+        console.log('Limit not found');
+      }
+    },
+    async increment() {
+      try {
+        const { eventId: ev } = this.$route.params;
+        await axios.put(apiBase + `/counter/limit/${ev[0]}`, {
+          eventId: this.id,
+          freeSpace: 1,
+          increment: true,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async decrement() {
+      try {
+        const { eventId: ev } = this.$route.params;
+        await axios.put(apiBase + `/counter/limit/${ev[0]}`, {
+          eventId: this.id,
+          freeSpace: 1,
+          increment: false,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+
+  async mounted() {
+    await this.getCounter();
+    const timedData = () => {
+      this.getCounter();
+      this.polling = setTimeout(timedData, pollingInterval);
+    };
+    this.polling = setTimeout(timedData, pollingInterval);
+  },
+  beforeUnmount() {
+    clearInterval(this.polling);
   },
 };
 </script>
@@ -174,5 +224,25 @@ export default {
 
 .logo-hell {
   margin-left: 63px;
+}
+
+.admin-panel {
+  position: absolute;
+  right: 30px;
+  bottom: 10px;
+  z-index: 10;
+  width: 50px;
+  border: 1px solid rgba(10, 10, 10, 0.2);
+  display: flex;
+  justify-content: space-around;
+  opacity: 0;
+  &__button {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
 }
 </style>
