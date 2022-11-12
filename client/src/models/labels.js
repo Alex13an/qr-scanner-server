@@ -12,7 +12,7 @@ export default {
     press: 'Press',
     local_press: 'Local Press',
     staff: 'Staff',
-    other: 'Other',
+    other: 'Other, Interpeters',
     organizators: 'Organizators',
   },
 };
