@@ -18,6 +18,16 @@
         {{ labels.eventsEnter }}
       </router-link>
       <router-link :to="{ name: 'counter' }" class="main-list__item main-list__item_guests">Counter</router-link>
+
+      <div class="main-list__title">{{ labels.other }}</div>
+      <router-link
+        v-for="(otherType, index) in otherTypes"
+        :key="index"
+        :to="{ name: 'other-enter', params: { otherType } }"
+        class="main-list__item main-list__item_other"
+      >
+        {{ labels.otherTypes[otherType] }}
+      </router-link>
     </div>
   </div>
 </template>
@@ -34,6 +44,11 @@ export default {
   beforeCreate() {
     this.tables = tables;
     this.labels = labels;
+  },
+  computed: {
+    otherTypes() {
+      return ['press', 'local_press', 'staff', 'organizators', 'other'];
+    },
   },
 };
 </script>
@@ -73,6 +88,13 @@ export default {
       &:hover,
       &:active {
         background: var(--light-blue);
+      }
+    }
+    &_other {
+      background: var(--purple);
+      &:hover,
+      &:active {
+        background: var(--light-purple);
       }
     }
   }

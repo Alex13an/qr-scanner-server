@@ -7,4 +7,12 @@ export default {
   guestsEnter: 'Guests, Enter',
   enter: 'Enter',
   eventsEnter: 'Events',
+  other: 'Press, Local Press, Staff, Organizators, Other',
+  otherTypes: {
+    press: 'Press',
+    local_press: 'Local Press',
+    staff: 'Staff',
+    other: 'Other',
+    organizators: 'Organizators',
+  },
 };

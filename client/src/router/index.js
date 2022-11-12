@@ -6,6 +6,7 @@ import GuestsEventsEnterScan from '../pages/GuestsEventsEnterScan';
 import GuestsEventsSelect from '../pages/GuestsEventsSelect';
 import GuestsCounterSelect from '../pages/GuestsCounterSelect';
 import CounterPage from '../pages/CounterPage';
+import OtherEnterScan from '../pages/OtherEnterScan';
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/scan/guests/counter/:eventId',
     name: 'counter-event',
     component: CounterPage,
+  },
+  {
+    path: '/scan/other/enter/:otherType',
+    name: 'other-enter',
+    component: OtherEnterScan,
   },
 ];
 
