@@ -87,7 +87,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 80vw;
-  margin: 10vh 10vw 0;
+  margin: 1vw 10vw 0;
 }
 
 .current-data {

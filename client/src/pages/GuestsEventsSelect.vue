@@ -39,7 +39,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 80vw;
-  margin: 2vw 10vw 0;
+  margin: 1vw 10vw 0;
   &__label {
     font-size: 20px;
     margin: 1vw 0;
