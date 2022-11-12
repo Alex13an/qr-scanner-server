@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <QrScanner :qrbox="250" :fps="10" @result="onScan" />
+    <QrScanner :qrbox="200" :fps="10" @result="onScan" />
     <div class="current-data">
       <div class="current-data__title">{{ labels.volunteers }}</div>
       <div class="current-data__extra">{{ checkOut ? labels.checkOut : labels.checkIn }}</div>

@@ -1,5 +1,5 @@
 <template>
-  <QrScanner :qrbox="250" :fps="10" @result="onScan" />
+  <QrScanner :qrbox="200" :fps="10" @result="onScan" />
 </template>
 
 <script>
