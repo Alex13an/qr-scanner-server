@@ -26,7 +26,7 @@ app.use(express.static(path.join(path.dirname(__dirname), 'client/dist')))
 app.use(errorHandler);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(path.dirname(__dirname), 'client/build/index.html'))
+  res.sendFile(path.join(path.dirname(__dirname), 'client/dist/index.html'))
 })
 
 const httpsOptions = {
