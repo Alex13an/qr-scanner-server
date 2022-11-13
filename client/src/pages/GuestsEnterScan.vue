@@ -35,6 +35,7 @@ export default {
       errorMessage: '',
       isLoading: false,
       successMessage: '',
+      isOk: false,
     };
   },
   computed: {
