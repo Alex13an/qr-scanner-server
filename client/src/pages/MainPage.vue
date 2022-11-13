@@ -1,6 +1,5 @@
 <template>
   <div class="main-container">
-    <div @click="bust()">111</div>
     <DaySelector />
     <div class="main-list">
       <div class="main-list__title">{{ labels.volunteers }}</div>
@@ -38,8 +37,6 @@ import tables from '../models/tables.js';
 import labels from '../models/labels.js';
 import otherEvents from '../models/otherEvents.js';
 import DaySelector from '../components/DaySelector.vue';
-import axios from 'axios';
-import { apiBase } from '../models/apibase.js';
 
 export default {
   components: {
@@ -49,20 +46,6 @@ export default {
     this.tables = tables;
     this.labels = labels;
     this.otherEvents = otherEvents;
-  },
-  methods: {
-    bust() {
-      try {
-        for (let i = 1; i < 50; i++) {
-          axios.put(apiBase + `/${tables.volunteers.name}/${100000000 + i}`, {
-            day: 'day_three',
-            checkIn: true,
-          });
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    },
   },
 };
 </script>
