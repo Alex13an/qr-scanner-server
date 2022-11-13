@@ -2,12 +2,9 @@ const ID_LENGTH = 9;
 
 class QrValidation {
   prepareQrData(decodedText, tableName) {
-    let [id, row, sheet, endSheet] = decodedText.split('_');
+    let [id, row, sheet] = decodedText.split('_');
     if (!id || !row || !sheet) {
       return 'Failed to scan QR';
-    }
-    if (endSheet) {
-      sheet = sheet + '_' + endSheet;
     }
     if (sheet !== tableName) {
       return 'Wrong QR Origin';
