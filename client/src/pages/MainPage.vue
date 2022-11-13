@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <div>111</div>
+    <div @click="bust()">111</div>
     <DaySelector />
     <div class="main-list">
       <div class="main-list__title">{{ labels.volunteers }}</div>
