@@ -4,7 +4,7 @@ import GoogleSheetsRepository from './GoogleSheetsRepository.js';
 import { setIntervalAsync } from 'set-interval-async';
 import { createUpdate } from '../utils/UpdateCreator.js'
 
-const UPDATE_PERIOD = 1300;
+const UPDATE_PERIOD = 2000;
 
 class GoogleSheetsUpdater {
   updateFields = [];

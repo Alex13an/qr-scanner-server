@@ -120,6 +120,7 @@ class GoogleSheetsRepository {
       }
 
       const newLastRow = formDataList[formDataList.length - 1].form_row + 1;
+      console.log('Forms updated, row', newLastRow);
       if (lastRow) {
         await GetDataRowService.updateLastRow(tableTypes.Form, newLastRow);
       } else {
