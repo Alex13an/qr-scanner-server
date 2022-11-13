@@ -6,6 +6,9 @@ class QrValidation {
     if (!id || !row || !sheet) {
       return 'Failed to scan QR';
     }
+    if (sheet === 'local') {
+      sheet = sheet + '_press';
+    }
     if (sheet !== tableName) {
       return 'Wrong QR Origin';
     }
