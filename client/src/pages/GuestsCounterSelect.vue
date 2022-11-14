@@ -10,6 +10,7 @@
       >
         <span class="events__event-id">{{ event.eventId }}</span>
         {{ event.eventName }}
+        <span class="events__event-location">{{ getEventLocation(event.eventId) }}</span>
       </router-link>
     </template>
   </div>
@@ -17,6 +18,7 @@
 
 <script>
 import events from '../models/events.js';
+import { locations } from '../models/locations.js';
 export default {
   beforeCreate() {
     this.events = events;
@@ -29,6 +31,9 @@ export default {
           eventId: key,
           eventName: session[key],
         }));
+    },
+    getEventLocation(eventId) {
+      return Object.values(locations).find((loc) => loc.events.includes(eventId)).label;
     },
   },
 };
@@ -61,6 +66,9 @@ export default {
   &__event-id {
     margin-right: 0.1vw;
     text-transform: uppercase;
+  }
+  &__event-location {
+    color: var(--green);
   }
 }
 </style>
