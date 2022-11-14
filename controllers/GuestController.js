@@ -106,7 +106,7 @@ class GuestController {
       const guest = await GuestService.getGuest(id);
       const currentSession = guest[session];
       if (currentSession !== '0') {
-        res.status(200).json({ updated: false, message: 'Guest already entered event' })
+        res.status(200).json({ updated: false, reason: 'Guest already entered event' })
         return;
       }
       const newCheck = eventId;
