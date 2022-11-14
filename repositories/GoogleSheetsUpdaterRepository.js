@@ -16,13 +16,13 @@ class GoogleSheetsUpdater {
 
   timedCallback = async () => {
     try {
-      const authClient = await GoogleAuthService.authorize();
-      await GoogleSheetsRepository.getForm(authClient);
+      // const authClient = await GoogleAuthService.authorize();
 
       if (this.updateFields.length < 1) {
         return;
       }
 
+      await GoogleSheetsRepository.getForm(authClient);
       const updateNum = await this.makeUpdate(authClient);
       this.updateFields.splice(0, updateNum);
     } catch (err) {

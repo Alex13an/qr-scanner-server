@@ -60,6 +60,12 @@ class GuestService {
       .orWhere(`session_${session}`, `3,${eventId}`);
     return res;
   }
+
+  async getActiveSeatsForce(session, eventId) {
+    const res = await knex(tableName).count(`session_${session} as amount`)
+      .where(`session_${session}`, eventId);
+    return res;
+  }
 }
 
 export default new GuestService();

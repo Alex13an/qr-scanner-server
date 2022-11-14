@@ -91,6 +91,46 @@ class GuestController {
       next(ApiError.badRequest(err.message));
     }
   }
+
+  async guestEnterEventForce(req, res, next) {
+    try {
+      const id = req.params.id;
+      const session = req.body.session; // example 'session_d'
+      const eventId = req.body.eventId; // example 2
+
+      if (!id || !session || !eventId) {
+        next(ApiError.badRequest('Not enough data'));
+        return;
+      }
+
+      const guest = await GuestService.getGuest(id);
+      const currentSession = guest[session];
+      if (currentSession !== '0') {
+        res.status(200).json({ updated: false, message: 'Guest already entered event' })
+        return;
+      }
+      const newCheck = eventId;
+      const resData = await GuestService.updateGuestEvent(id, session, newCheck);
+
+      if (resData) {
+        const { guest_row, day_one, day_two, day_three, day_four, ...data } = guest;
+        data[session] = newCheck;
+        GoogleSheetsUpdaterRepository.addUpdate({
+          data,
+          type: tableTypes.Events,
+          row: guest.guest_row,
+          extra: { eventsOnly: true },
+        });
+
+        const message = 'Checked in successfully';
+        res.status(200).json({ updated: true, message });
+      } else {
+        next(ApiError.badRequest({ updated: false, mesage: 'Updating error' }));
+      }
+    } catch (err) {
+      next(ApiError.badRequest(err.message));
+    }
+  }
 }
 
 export default new GuestController();

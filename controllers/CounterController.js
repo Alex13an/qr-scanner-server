@@ -142,6 +142,28 @@ class CounterController {
       next(ApiError.badRequest(err.message));
     }
   }
+
+  async getCounterForce(req, res, next) {
+    try {
+      const eventData = req.params.id; // example: b4
+      const [session, eventId] = eventData.split('');
+
+      const resData = await EventsLimitsService.getEventLimit(session, eventId);
+      if (!resData) {
+        next(ApiError.badRequest('There is no specified limit for this event'));
+        return;
+      }
+      const { limit, free_space } = resData;
+      const seatsData = await GuestService.getActiveSeatsForce(session, eventId);
+      if (!seatsData) {
+        next(ApiError.badRequest('Places not found'));
+      }
+      const placeData = { regPlaces: 0, seatPlaces: limit - seatsData[0].amount + free_space };
+      res.status(200).json({ placeData });
+    } catch (err) {
+      next(ApiError.badRequest(err.message));
+    }
+  }
 }
 
 export default new CounterController();
